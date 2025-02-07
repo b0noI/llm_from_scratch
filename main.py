@@ -1,4 +1,6 @@
 from self_attention import SelfAttention_v1
+from multi_head_self_attention import MultiHeadSelfAttention
+from multi_head_self_attention_2 import MultiHeadSelfAttention_2
 from torch_based_data import load_verdict_txt_dataloader
 
 
@@ -14,7 +16,7 @@ embedding_size = 2
 embedding_layer = torch.nn.Embedding(vocab_size, embedding_size)
 
 context_length = 6
-batch_size = 8
+batch_size = 2
 
 dataloader = load_verdict_txt_dataloader(batch_size=batch_size, max_length=context_length, shuffle=True, stride=context_length)
 data_iter = iter(dataloader)
@@ -29,6 +31,7 @@ input_embeddings = token_embeddings + pos_embeddings
 d_in = embedding_size
 d_out = embedding_size
 
-
-llm = SelfAttention_v1(d_in=d_in, d_out=d_out)
-print(llm(input_embeddings[0]))
+llm = MultiHeadSelfAttention_2(d_in=d_in, d_out=d_out, context_length=context_length, num_heads=2)
+result = llm(input_embeddings)
+print(result)
+print(result.shape)
