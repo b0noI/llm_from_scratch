@@ -11,12 +11,12 @@ torch.manual_seed(123)
 
 
 vocab_size = 50257
-embedding_size = 2
+embedding_size = 768
+context_length = 1024
+batch_size = 5
+num_heads = 12
 
 embedding_layer = torch.nn.Embedding(vocab_size, embedding_size)
-
-context_length = 6
-batch_size = 2
 
 dataloader = load_verdict_txt_dataloader(batch_size=batch_size, max_length=context_length, shuffle=True, stride=context_length)
 data_iter = iter(dataloader)
@@ -31,7 +31,7 @@ input_embeddings = token_embeddings + pos_embeddings
 d_in = embedding_size
 d_out = embedding_size
 
-llm = MultiHeadSelfAttention_2(d_in=d_in, d_out=d_out, context_length=context_length, num_heads=2)
+llm = MultiHeadSelfAttention_2(d_in=d_in, d_out=d_out, context_length=context_length, num_heads=num_heads)
 result = llm(input_embeddings)
 print(result)
 print(result.shape)
